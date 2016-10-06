@@ -1,0 +1,419 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>iMessageBridgeAPI</name>
+    </assembly>
+    <members>
+        <member name="T:DylanBriedis.iMessageBridge.Attachment">
+            <summary>
+            Represents an attachment for a message. Usually an image or a video that is sent along with the message.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Attachment.Id">
+            <summary>
+            The id of the attachment.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Attachment.FullFileName">
+            <summary>
+            The full file name of the attachment.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Attachment.FileName">
+            <summary>
+            The simplified file name of the attachment.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Attachment.CreatedDate">
+            <summary>
+            When the attachment was created.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Attachment.MimeType">
+            <summary>
+            The attachment's mime type.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Attachment.TotalBytes">
+            <summary>
+            The total bytes of the attachment.
+            </summary>
+        </member>
+        <member name="T:DylanBriedis.iMessageBridge.Conversation">
+            <summary>
+            Represents a conversation with you and another person or with a group of people.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Conversation.Id">
+            <summary>
+            The id of the conversation.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Conversation.Name">
+            <summary>
+            The "name" of the conversation. Usually the name is shown as the person's phone number or email, or if the conversation is a group, the name may look something like this: chat539749676434700307. We recommend you use the display name when you show the conversation's name on your app.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Conversation.Recipients">
+            <summary>
+            The list of recipients in the conversation.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Conversation.Messages">
+            <summary>
+            The list of messages in the conversation.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Conversation.ServiceType">
+            <summary>
+            The type of service the conversation uses.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Conversation.HasGroupName">
+            <summary>
+            Returns true if the conversation has a group name.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Conversation.DisplayName">
+            <summary>
+            Gets the display name of the conversation. If a group name was set, the group name is returned, if not, the recipients' names are returned.
+            </summary>
+        </member>
+        <member name="M:DylanBriedis.iMessageBridge.Conversation.ToString">
+            <summary>
+            Returns the string representation of the conversation.
+            </summary>
+            <returns>The display name.</returns>
+        </member>
+        <member name="T:DylanBriedis.iMessageBridge.ServiceType">
+            <summary>
+            The service type.
+            </summary>
+        </member>
+        <member name="F:DylanBriedis.iMessageBridge.ServiceType.iMessage">
+            <summary>
+            Apple's instant messaging service. Supported in iOS and OS X. 
+            </summary>
+        </member>
+        <member name="F:DylanBriedis.iMessageBridge.ServiceType.SMS">
+            <summary>
+            Short Message Service. The standard text messaging service for many regular cell phones and other smartphones.
+            </summary>
+        </member>
+        <member name="T:DylanBriedis.iMessageBridge.ObjectType">
+            <summary>
+            Types for a bridge object.
+            </summary>
+        </member>
+        <member name="F:DylanBriedis.iMessageBridge.ObjectType.Recipient">
+            <summary>
+            A recipient object.
+            </summary>
+        </member>
+        <member name="F:DylanBriedis.iMessageBridge.ObjectType.Conversation">
+            <summary>
+            A conversation object.
+            </summary>
+        </member>
+        <member name="F:DylanBriedis.iMessageBridge.ObjectType.Message">
+            <summary>
+            A message object.
+            </summary>
+        </member>
+        <member name="F:DylanBriedis.iMessageBridge.ObjectType.Attachment">
+            <summary>
+            An attachment object.
+            </summary>
+        </member>
+        <member name="T:DylanBriedis.iMessageBridge.EventType">
+            <summary>
+            Types for stream update events.
+            </summary>
+        </member>
+        <member name="F:DylanBriedis.iMessageBridge.EventType.Add">
+            <summary>
+            An object was added to the bridge database.
+            </summary>
+        </member>
+        <member name="F:DylanBriedis.iMessageBridge.EventType.Update">
+            <summary>
+            An object's properties was updated.
+            </summary>
+        </member>
+        <member name="F:DylanBriedis.iMessageBridge.EventType.Remove">
+            <summary>
+            An object was removed from the bridge database.
+            </summary>
+        </member>
+        <member name="T:DylanBriedis.iMessageBridge.IIdObject">
+            <summary>
+            The base interface for a bridge object.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.IIdObject.Id">
+            <summary>
+            The id of the object.
+            </summary>
+        </member>
+        <member name="T:DylanBriedis.iMessageBridge.Message">
+            <summary>
+            Represents a text message.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Message.Id">
+            <summary>
+            The id of the message.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Message.From">
+            <summary>
+            Who the message is from or sent to.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Message.FromMe">
+            <summary>
+            Returns true if the message is sent by you.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Message.ServiceType">
+            <summary>
+            The type of service the message used.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Message.Date">
+            <summary>
+            When the message was sent.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Message.DateRead">
+            <summary>
+            When the message was read by you or the recipient. If the recipient has read receipts off, the value will be null.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Message.DateDelivered">
+            <summary>
+            When the message was delivered. If the message was sent using SMS, the value will be null.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Message.HasRead">
+            <summary>
+            Returns true if the recipient or you read the message. If the recipient has read receipts off, the value will be false.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Message.HasDelivered">
+            <summary>
+            Returns true if the message was delivered. If the message was sent using SMS, the value will be false.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Message.HasSent">
+            <summary>
+            Returns true if the message was sent successfully. If the message was sent by you, the value will be false.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Message.Subject">
+            <summary>
+            The subject of the message. Usually shown above the actual message.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Message.Text">
+            <summary>
+            Basically the message itself.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Message.Attachments">
+            <summary>
+            The list of attachments in this message.
+            </summary>
+        </member>
+        <member name="M:DylanBriedis.iMessageBridge.Message.ToString">
+            <summary>
+            Returns the string representation of the message.
+            </summary>
+            <returns>Who the message is from and the message's text.</returns>
+        </member>
+        <member name="T:DylanBriedis.iMessageBridge.Recipient">
+            <summary>
+            Represents a recipient. Typically a person who gets messages from you.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Recipient.Id">
+            <summary>
+            The id of the recipient.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Recipient.Address">
+            <summary>
+            The phone number or email of the recipient.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Recipient.Country">
+            <summary>
+            The country of where the recipient's phone is.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Recipient.ServiceType">
+            <summary>
+            The type of service the recipient uses.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Recipient.Name">
+            <summary>
+            The name of the recipient. If a name is not found in your contacts or is not added, the address is returned.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.Recipient.HasPicture">
+            <summary>
+            Returns true if this recipient has a contact picture set.
+            </summary>
+        </member>
+        <member name="M:DylanBriedis.iMessageBridge.Recipient.ToString">
+            <summary>
+            Returns the string representation of the recipient.
+            </summary>
+            <returns>The name of the recipient.</returns>
+        </member>
+        <member name="F:DylanBriedis.iMessageBridge.Recipient._picture">
+            <summary>
+            Internal use only.
+            </summary>
+        </member>
+        <member name="T:DylanBriedis.iMessageBridge.BridgeContext">
+            <summary>
+            Provides the API to an iMessage Bridge server.
+            </summary>
+        </member>
+        <member name="M:DylanBriedis.iMessageBridge.BridgeContext.#ctor(System.String)">
+            <summary>
+            Constucts a bridge context with a hostname or an IP address to connect to.
+            </summary>
+            <param name="host">A hostname or an IP address.</param>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.BridgeContext.Hostname">
+            <summary>
+            The hostname that this client will connect to.
+            </summary>
+        </member>
+        <member name="M:DylanBriedis.iMessageBridge.BridgeContext.Dispose">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.BridgeContext.Recipients">
+            <summary>
+            The list of recipients on the bridge.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.BridgeContext.Conversations">
+            <summary>
+            The list of conversations on the bridge.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.BridgeContext.Messages">
+            <summary>
+            The list of messages on the bridge.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.BridgeContext.Attachments">
+            <summary>
+            The list of attachments on the bridge.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.BridgeContext.AuthenticationCredentials">
+            <summary>
+            The credentials for logging in to a authentication enabled bridge.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.BridgeContext.AuthenticationIsRequired">
+            <summary>
+            Gets a value indicating whether if the bridge needs authentication or not.
+            </summary>
+        </member>
+        <member name="M:DylanBriedis.iMessageBridge.BridgeContext.ValidateCredentials">
+            <summary>
+            Validate the currently set credentials.
+            </summary>
+            <returns>Returns true if the user is authenticated.</returns>
+        </member>
+        <member name="M:DylanBriedis.iMessageBridge.BridgeContext.Init">
+            <summary>
+            Initializes the context by getting all the recipients, conversations, and messages from the bridge.
+            </summary>
+        </member>
+        <member name="M:DylanBriedis.iMessageBridge.BridgeContext.DownloadRecipientPicture(System.Int32)">
+            <summary>
+            Downloads a recipient's contact picture from the bridge.
+            </summary>
+            <param name="id">The recipient's id.</param>
+            <returns>The picture's stream from the bridge.</returns>
+        </member>
+        <member name="M:DylanBriedis.iMessageBridge.BridgeContext.DownloadAttachment(System.Int32)">
+            <summary>
+            Downloads an attachment from the bridge.
+            </summary>
+            <param name="id">The attachment's id.</param>
+            <returns>The attachment's stream from the bridge.</returns>
+        </member>
+        <member name="M:DylanBriedis.iMessageBridge.BridgeContext.SendMessage(DylanBriedis.iMessageBridge.Recipient,System.String)">
+            <summary>
+            Sends a text message to a recipient.
+            </summary>
+            <param name="recipient">The recipient you want it to send to.</param>
+            <param name="text">The message to send.</param>
+        </member>
+        <member name="M:DylanBriedis.iMessageBridge.BridgeContext.SendMessage(System.String,System.String,System.Boolean)">
+            <summary>
+            Sends a text message to a recipient.
+            </summary>
+            <param name="recipientAddress">The recipient's phone number or email.</param>
+            <param name="text">The message to send.</param>
+            <param name="sendAsSMS">Sets whether to send as a SMS or an iMessage.</param>
+        </member>
+        <member name="M:DylanBriedis.iMessageBridge.BridgeContext.StartStream">
+            <summary>
+            Starts listening for bridge events. All events will get called to StreamUpdate.
+            </summary>
+        </member>
+        <member name="E:DylanBriedis.iMessageBridge.BridgeContext.StreamUpdate">
+            <summary>
+            Occurs when a stream update occurs.
+            </summary>
+        </member>
+        <member name="M:DylanBriedis.iMessageBridge.BridgeContext.StopStream">
+            <summary>
+            Stops listening for bridge events.
+            </summary>
+        </member>
+        <member name="T:DylanBriedis.iMessageBridge.StreamUpdateEventHandler">
+            <summary>
+            Represents the method that will handle an event for stream updates.
+            </summary>
+            <param name="sender">The source of the event. This would reference the current bridge context.</param>
+            <param name="e">The event's arguments containing update infomation.</param>
+        </member>
+        <member name="T:DylanBriedis.iMessageBridge.StreamUpdateEventArgs">
+            <summary>
+            Represents event data for stream updates.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.StreamUpdateEventArgs.ObjectType">
+            <summary>
+            Gets what type of object was updated.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.StreamUpdateEventArgs.EventType">
+            <summary>
+            Gets what type of event was invoked.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.StreamUpdateEventArgs.Object">
+            <summary>
+            The updated object.
+            </summary>
+        </member>
+        <member name="P:DylanBriedis.iMessageBridge.StreamUpdateEventArgs.Error">
+            <summary>
+            Gets an exception object when the update errors.
+            </summary>
+        </member>
+    </members>
+</doc>

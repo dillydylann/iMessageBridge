@@ -2,9 +2,7 @@
 
 **Current version: 1.0-a1 (This is only an alpha version so changes in new versions will usually be bug fixes or fixed mistakes in the source code)**
 
-A .NET interface for the iMessage Bridge API.
-
-Note that .NET 4.5 is required.
+A UWP interface for the iMessage Bridge API.
 
 ## Usage/Examples
 
@@ -12,25 +10,22 @@ Getting started:
 ```csharp
 // Create the context.
 BridgeContext context = new BridgeContext(/* Your bridge's IP goes here */);
-if (context.AuthenticationIsRequired) // Check if we have to log in.
+if (await context.AuthenticationIsRequiredAsync()) // Check if we have to log in.
 {
     bool successLogin = false;
     while (!successLogin) // Loop if the log in fails.
     {
-        Console.Write("Username: ");
-        string username = Console.ReadLine(); // Enter username.
-        Console.Write("Password: ");
-        string password = Console.ReadLine(); // Enter password (shown).
-        context.AuthenticationCredentials = new NetworkCredential(username, password);
-        successLogin = context.ValidateCredentials(); // Validate username and password.
+        string username = "username goes here";
+        string password = "password goes here";
+        context.AuthenticationCredentials = new Credentials(username, password);
+        successLogin = await context.ValidateCredentialsAsync(); // Validate username and password.
         if (successLogin)
-            Console.WriteLine("Successful login!");
+            // Login was successful.
         else
-            Console.WriteLine("Incorrect login!");
-        Console.WriteLine();
+            // Login has failed.
     }
 }
-context.Init(); // Initialize the context.
+await context.InitAsync(); // Initialize the context.
 // We're good to go now!
 ```
 
@@ -38,13 +33,13 @@ List all the conversations:
 ```csharp
 foreach (var c in context.Conversations)
 {
-    Console.WriteLine("-- " + c.Value.DisplayName + " --");
+    Debug.WriteLine("-- " + c.Value.DisplayName + " --");
     foreach (var m in c.Value.Messages)
         if (m.FromMe) // Is the message from you?
-            Console.WriteLine("Me: " + m.Text);
+            Debug.WriteLine("Me: " + m.Text);
         else if (m.From != null) // I don't know why but sometimes blank messages will show with no recipient.
-            Console.WriteLine(m.From.Name + ": " + m.Text);
-    Console.WriteLine();
+            Debug.WriteLine(m.From.Name + ": " + m.Text);
+    Debug.WriteLine();
 }
 ```
 
@@ -58,17 +53,19 @@ context.StreamUpdate += (s, e) =>
         {
             Message m = e.Object as Message;
             if (!m.FromMe)
-                Console.WriteLine("New text from " + m.From.Name + ": " + m.Text);
+                Debug.WriteLine("New text from " + m.From.Name + ": " + m.Text);
         }
     }
+	else if (ev.Error.Message.ToLower().Contains("closed")) // Reconnect when the stream closes unexpectedly.
+		await context.StartStreamAsync();
     else
         throw e.Error;
 };
-context.StartStream(); // Connect to the stream.
+await context.StartStreamAsync(); // Connect to the stream.
 ```
 
 Send a text message:
 ```csharp
 // Send a text message to the phone number +1 (800) 555-5555 saying this message and as an iMessage.
-context.SendMessage("+18005555555", "Hey dude! What's going on later?", false);
+context.SendMessageAsync("+18005555555", "Hey dude! What's going on later?", false);
 ```
