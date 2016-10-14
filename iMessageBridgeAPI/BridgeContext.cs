@@ -270,16 +270,22 @@ namespace DylanBriedis.iMessageBridge
         }
 
         ClientWebSocket client;
+        CancellationTokenSource cancelToken;
 
         /// <summary>
         /// Starts listening for bridge events. All events will get called to StreamUpdate.
         /// </summary>
         public async void StartStream()
         {
-            client = new ClientWebSocket();
-            await client.ConnectAsync(new Uri("ws://" + Hostname + ":9081/"), CancellationToken.None);
-            running = true;
-            new Thread(StreamClientThread).Start();
+            if (!running)
+            {
+                client = new ClientWebSocket();
+                cancelToken = new CancellationTokenSource();
+                await client.ConnectAsync(new Uri("ws://" + Hostname + ":9081/"), cancelToken.Token);
+                running = true;
+                new Thread(StreamClientThread).Start();
+            } else
+                throw new InvalidOperationException("Bridge stream is already running.");
         }
 
         bool running = false;
@@ -291,9 +297,9 @@ namespace DylanBriedis.iMessageBridge
                 {
                     var buffer = new byte[1024];
                     var segment = new ArraySegment<byte>(buffer);
-                    var result = await client.ReceiveAsync(segment, CancellationToken.None);
-                    string str = Encoding.UTF8.GetString(buffer);
-                    if (!(str.StartsWith("\0") && str.EndsWith("\0")))
+                    var result = await client.ReceiveAsync(segment, cancelToken.Token);
+                    string str = Encoding.UTF8.GetString(buffer).Trim('\0');
+                    if (!string.IsNullOrEmpty(str))
                     {
                         JObject json = JObject.Parse(str);
                         switch (json["event"].ToString())
@@ -302,7 +308,7 @@ namespace DylanBriedis.iMessageBridge
                                 if ((bool)json["needsAuth"])
                                 {
                                     string login = string.Format("{{\"username\":\"{0}\",\"password\":\"{1}\"}}", AuthenticationCredentials.UserName.Replace("\"", "\\\""), AuthenticationCredentials.Password.Replace("\"", "\\\""));
-                                    await client.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(login)), WebSocketMessageType.Text, true, CancellationToken.None);
+                                    await client.SendAsync(new ArraySegment<byte>(Encoding.UTF8.GetBytes(login)), WebSocketMessageType.Text, true, cancelToken.Token);
                                 }
                                 break;
                             case "update":
@@ -399,9 +405,19 @@ namespace DylanBriedis.iMessageBridge
         /// </summary>
         public async void StopStream()
         {
-            running = false;
-            await client.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed", CancellationToken.None);
-            client.Dispose();
+            if (running)
+            {
+                running = false;
+                try
+                {
+                    await client.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closed", cancelToken.Token);
+                }
+                catch { } // If close fails, it's probably alright closed, so dispose the client anyway. 
+                cancelToken.Cancel();
+                client.Dispose();
+            }
+            else
+                throw new InvalidOperationException("Bridge stream is already stopped.");
         }
     }
 

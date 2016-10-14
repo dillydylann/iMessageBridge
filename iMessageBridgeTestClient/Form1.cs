@@ -91,7 +91,7 @@ namespace DylanBriedis.iMessageBridge.TestClient
                             notifyIcon1.ShowBalloonTip(5000, message.From.Name, message.Text, ToolTipIcon.Info);
                     }
                 }
-                else if (ev.Error.Message.ToLower().Contains("closed")) // Reconnect when the stream closes unexpectedly.
+                else if (ev.Error.Message.ToLower().Contains("close")) // Reconnect when the stream closes unexpectedly.
                     context.StartStream();
                 else
                     throw ev.Error;

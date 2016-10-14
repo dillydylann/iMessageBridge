@@ -273,3 +273,6 @@ ContactUtils/ContactUtils.xcodeproj/xcuserdata/dylan.xcuserdatad/xcschemes/xcsch
 
 iMessageBridgeUI/iMessageBridgeUI.xcodeproj/xcuserdata/dylan.xcuserdatad/xcschemes/xcschememanagement.plist
 /iMessageBridgeUWP
+/iMessageBridge/iMessage Bridge.app/Contents/MonoBundle/iMessageBridge.vshost.exe
+/iMessageBridge/iMessage Bridge.app/Contents/MonoBundle/iMessageBridge.vshost.exe.config
+/iMessageBridge/iMessage Bridge.app/Contents/MonoBundle/iMessageBridge.vshost.exe.manifest

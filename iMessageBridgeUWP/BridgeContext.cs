@@ -323,19 +323,25 @@ namespace DylanBriedis.iMessageBridge
 
         async Task StartStreamAsyncInternal()
         {
-            client = new MessageWebSocket();
-            client.MessageReceived += Client_MessageReceived;
-            await client.ConnectAsync(new Uri("ws://" + Hostname + ":9081/"));
-            clientWriter = new DataWriter(client.OutputStream);
+            if (!running)
+            {
+                client = new MessageWebSocket();
+                client.MessageReceived += Client_MessageReceived;
+                await client.ConnectAsync(new Uri("ws://" + Hostname + ":9081/"));
+                clientWriter = new DataWriter(client.OutputStream);
+                running = true;
+            } else
+                throw new InvalidOperationException("Bridge stream is already running.");
         }
-        
+
+        bool running = false;
         private async void Client_MessageReceived(MessageWebSocket sender, MessageWebSocketMessageReceivedEventArgs args)
         {
             using (DataReader reader = args.GetDataReader())
-                //try
+                try
                 {
-                    string str = reader.ReadString(reader.UnconsumedBufferLength);
-                    if (!(str.StartsWith("\0") && str.EndsWith("\0")))
+                    string str = reader.ReadString(reader.UnconsumedBufferLength).Trim('\0');
+                    if (!string.IsNullOrEmpty(str))
                     {
                         JObject json = JObject.Parse(str);
                         switch (json["event"].ToString())
@@ -416,11 +422,11 @@ namespace DylanBriedis.iMessageBridge
                         }
                     }
                 }
-                //catch (Exception ex)
-                //{
-                //    StopStream();
-                //    StreamUpdate?.Invoke(this, new StreamUpdateEventArgs() { Error = ex });
-                //}
+                catch (Exception ex)
+                {
+                    StopStream();
+                    StreamUpdate?.Invoke(this, new StreamUpdateEventArgs() { Error = ex });
+                }
         }
 
         // Keep an object referenced with the original.
@@ -441,9 +447,15 @@ namespace DylanBriedis.iMessageBridge
         /// </summary>
         public void StopStream()
         {
-            clientWriter.Dispose();
-            client.Close(1000, "Closed");
-            client.Dispose();
+            if (running)
+            {
+                running = false;
+                clientWriter.Dispose();
+                client.Close(1000, "Closed");
+                client.Dispose();
+            }
+            else
+                throw new InvalidOperationException("Bridge stream is already stopped.");
         }
     }
 
